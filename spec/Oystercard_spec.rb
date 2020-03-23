@@ -14,14 +14,21 @@ describe Oystercard do
     card.top_up(5)
     expect(card::balance).to eq 5
   end
-  
-  describe 'top_up' do 
-  it "limits the customer to a max of £90" do 
-    expect{subject.top_up(91)}.to raise_error 
+
+  it "#deduct fair from balance" do
+    card = Oystercard.new
+    card.top_up(5)
+    card.deduct(5)
+    expect(subject::balance).to eq 0
   end
-  
-  it "checks to see the limit is £90" do 
-    expect(subject::limit).to eq 90
+
+  describe 'top_up' do
+    it "limits the customer to a max of £90" do
+      expect{subject.top_up(91)}.to raise_error
+    end
+
+    it "checks to see the limit is £90" do
+      expect(subject::limit).to eq 90
+    end
   end
-end
 end

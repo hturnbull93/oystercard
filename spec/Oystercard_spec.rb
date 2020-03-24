@@ -1,19 +1,22 @@
 require 'oystercard'
 
 describe Oystercard do
+
   it "has a #balance" do
     expect(subject::balance).to eq 0
   end
   
   describe '#top_up' do
+    before(:each) do
+      subject.top_up(5)
+    end
+
     it "user can #top_up" do
       expect(subject).to respond_to(:top_up).with(1).argument
     end
     
     it "#top_up adds money to card" do
-      card = Oystercard.new
-      card.top_up(5)
-      expect(card::balance).to eq 5
+      expect(subject.balance).to eq 5
     end
 
     it "limits the customer to a max of £90" do
@@ -45,6 +48,10 @@ describe Oystercard do
   end
 
   describe '#touch_in' do
+    before(:each) do
+      subject.top_up(5)
+    end
+
     it 'it responds to #touch_in do' do
       expect(subject).to respond_to :touch_in
     end
@@ -55,7 +62,17 @@ describe Oystercard do
     end
   end
 
-  describe '#touch_in' do
+  describe '#touch_in with no money' do
+    it 'will raise an error if attempting to touch in with less than minimum amount on balance' do
+      expect { subject.touch_in }.to raise_error 'Balance under minimum amount to touch in'
+    end
+  end
+
+  describe '#touch_out' do
+    before(:each) do
+      subject.top_up(5)
+    end
+
     it 'it responds to #touch_out' do
       expect(subject).to respond_to :touch_out
     end

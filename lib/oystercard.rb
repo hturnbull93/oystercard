@@ -16,10 +16,8 @@ class Oystercard
     @balance += money
   end
 
-
-
   def in_journey?
-    @in_journey
+    true if entry_station
   end
 
   def touch_in(station)

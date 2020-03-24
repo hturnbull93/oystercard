@@ -81,7 +81,6 @@ describe Oystercard do
     it 'deducts the fair from balance' do
       expect { subject.touch_out(station) }.to change { subject.balance }.by(-1)
     end
-
   end
 
   describe 'current journey' do
@@ -98,6 +97,16 @@ describe Oystercard do
       subject.touch_in(station)
       subject.touch_out(station)
       expect(subject.entry_station).to eq nil
+    end
+  end
+
+  describe 'journey_history' do
+    before(:each) do
+      subject.top_up(5)
+    end
+
+    it 'is empty by default' do
+      expect(subject.journey_history).to eq({})
     end
   end
 

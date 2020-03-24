@@ -1,5 +1,5 @@
 class Oystercard
-  attr_reader :balance, :limit, :entry_station
+  attr_reader :balance, :limit, :entry_station, :journey_history
   CARD_LIMIT = 90
   STARTING_BALANCE = 0
   MINIMUM_TO_TRAVEL = 1
@@ -9,6 +9,7 @@ class Oystercard
     @balance = STARTING_BALANCE
     @limit = CARD_LIMIT
     @in_journey = false
+    @entry_station = nil
   end
 
   def top_up(money)
@@ -17,7 +18,7 @@ class Oystercard
   end
 
   def in_journey?
-    true if entry_station
+    !!@entry_station
   end
 
   def touch_in(station)
@@ -26,9 +27,13 @@ class Oystercard
     @entry_station = station
   end
 
-  def touch_out
+  def touch_out(exit_station)
     deduct(MINIMUM_FARE)
     @in_journey = false
+    @journey_history = {
+      entry: entry_station,
+      exit: exit_station
+    }
     @entry_station = nil
   end
 
@@ -45,4 +50,5 @@ class Oystercard
   def exceed_limit?(money)
     balance + money > limit
   end
+
 end

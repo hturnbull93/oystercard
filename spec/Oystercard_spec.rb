@@ -3,6 +3,8 @@ require 'oystercard'
 describe Oystercard do
 
   let(:station) { double :station }
+  let(:bank) {double :bank}
+  let(:embankment) { double :embankment }
 
   it "has a #balance" do
     expect(subject::balance).to eq 0
@@ -72,12 +74,12 @@ describe Oystercard do
 
     it 'when #touch_out #in_journey will return false' do
       subject.touch_in(station)
-      subject.touch_out
+      subject.touch_out(station)
       expect(subject.in_journey?).to eq false
     end
 
     it 'deducts the fair from balance' do
-      expect { subject.touch_out }.to change { subject.balance }.by(-1)
+      expect { subject.touch_out(station) }.to change { subject.balance }.by(-1)
     end
 
   end
@@ -94,8 +96,19 @@ describe Oystercard do
 
     it 'touch_out wipes the current entry station to nil' do
       subject.touch_in(station)
-      subject.touch_out
+      subject.touch_out(station)
       expect(subject.entry_station).to eq nil
+    end
+  end
+
+  describe 'feature test' do
+    before(:each) do
+      subject.top_up(5)
+    end
+    it "bank to embankment" do
+      subject.touch_in(bank)
+      subject.touch_out(embankment)
+      expect(subject.journey_history).to eq(entry: bank, exit: embankment)
     end
   end
 end

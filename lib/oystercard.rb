@@ -5,6 +5,7 @@ class Oystercard
   def initialize(balance = 0)
     @balance = balance
     @limit = CARD_LIMIT
+    @in_journey = false
   end
 
   def top_up(money)
@@ -17,5 +18,17 @@ class Oystercard
 
   def deduct(fair)
     @balance - fair
-  end 
+  end
+
+  def in_journey?
+    @in_journey
+  end
+
+  def touch_in
+    @in_journey = true
+  end
+
+  def touch_out
+    @in_journey = false
+  end
 end

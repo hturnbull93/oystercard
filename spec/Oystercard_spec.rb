@@ -22,9 +22,36 @@ describe Oystercard do
     expect(subject::balance).to eq 0
   end
 
+  it 'it responds to #in_journey?' do
+    expect(subject).to respond_to :in_journey?
+  end
+
+  it '#in_journey? returns false as default' do
+    expect(subject.in_journey?).to eq false
+  end
+
+  it 'it responds to #touch_in do' do
+    expect(subject).to respond_to :touch_in
+  end
+
+  it 'when #touch_in #in_journey will return true' do
+    subject.touch_in
+    expect(subject.in_journey?).to eq true
+  end
+
+  it 'it responds to #touch_out' do
+    expect(subject).to respond_to :touch_out
+  end
+
+  it 'when #touch_out #in_journey will return false' do
+    subject.touch_in
+    subject.touch_out
+    expect(subject.in_journey?).to eq false
+  end
+
   describe 'top_up' do
     it "limits the customer to a max of £90" do
-      expect{subject.top_up(91)}.to raise_error
+      expect{subject.top_up(91)}.to raise_error 'exceeded limit of £90!'
     end
 
     it "checks to see the limit is £90" do

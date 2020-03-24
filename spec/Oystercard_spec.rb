@@ -2,6 +2,8 @@ require 'oystercard'
 
 describe Oystercard do
 
+  let(:station) { double :station }
+
   it "has a #balance" do
     expect(subject::balance).to eq 0
   end
@@ -28,15 +30,6 @@ describe Oystercard do
     end
   end
 
-  describe '#deduct' do
-    xit "#deduct fair from balance" do
-      card = Oystercard.new
-      card.top_up(5)
-      card.deduct(5)
-      expect(subject::balance).to eq 0
-    end
-  end
-
   describe '#in_journey?' do
     it 'it responds to #in_journey?' do
       expect(subject).to respond_to :in_journey?
@@ -57,14 +50,14 @@ describe Oystercard do
     end
 
     it 'when #touch_in #in_journey will return true' do
-      subject.touch_in
+      subject.touch_in(station)
       expect(subject.in_journey?).to eq true
     end
   end
 
   describe '#touch_in with no money' do
     it 'will raise an error if attempting to touch in with less than minimum amount on balance' do
-      expect { subject.touch_in }.to raise_error 'Balance under minimum amount to touch in'
+      expect { subject.touch_in(station) }.to raise_error 'Balance under minimum amount to touch in'
     end
   end
 
@@ -78,7 +71,7 @@ describe Oystercard do
     end
 
     it 'when #touch_out #in_journey will return false' do
-      subject.touch_in
+      subject.touch_in(station)
       subject.touch_out
       expect(subject.in_journey?).to eq false
     end
@@ -87,5 +80,22 @@ describe Oystercard do
       expect { subject.touch_out }.to change { subject.balance }.by(-1)
     end
 
+  end
+
+  describe 'current journey' do
+    before(:each) do
+      subject.top_up(5)
+    end
+
+    it '#touch_in records the entry station of the current journey' do
+      subject.touch_in(station)
+      expect(subject.entry_station).to eq station
+    end
+
+    it 'touch_out wipes the current entry station to nil' do
+      subject.touch_in(station)
+      subject.touch_out
+      expect(subject.entry_station).to eq nil
+    end
   end
 end

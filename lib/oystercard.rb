@@ -3,6 +3,7 @@ class Oystercard
   CARD_LIMIT = 90
   STARTING_BALANCE = 0
   MINIMUM_TO_TRAVEL = 1
+  MINIMUM_FARE = 1
 
   def initialize
     @balance = STARTING_BALANCE
@@ -15,9 +16,7 @@ class Oystercard
     @balance += money
   end
 
-  def deduct(fair)
-    @balance - fair
-  end
+
 
   def in_journey?
     @in_journey
@@ -29,10 +28,15 @@ class Oystercard
   end
 
   def touch_out
+    deduct(MINIMUM_FARE)
     @in_journey = false
   end
 
   private
+
+  def deduct(fare)
+    @balance -= fare
+  end
 
   def under_minimum_balance?
     balance < MINIMUM_TO_TRAVEL

@@ -25,6 +25,7 @@ class Oystercard
   end
 
   def touch_in
+    raise 'Balance under minimum amount to touch in' unless balance >= 1
     @in_journey = true
   end
 

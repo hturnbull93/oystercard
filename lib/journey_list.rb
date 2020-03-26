@@ -12,10 +12,10 @@ class JourneyList
   def start_journey(station)
     @current_journey = @journey_class.new
     @current_journey.entry_station = station
+    @journey_history << @current_journey
   end
 
   def stop_journey(station)
     @current_journey.exit_station = station
-    @journey_history << @current_journey
   end
 end

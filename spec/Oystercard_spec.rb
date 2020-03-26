@@ -79,24 +79,8 @@ describe Oystercard do
     end
 
     it 'deducts the fair from balance' do
+      subject.touch_in(station)
       expect { subject.touch_out(station) }.to change { subject.balance }.by(-1)
-    end
-  end
-
-  describe 'current journey' do
-    before(:each) do
-      subject.top_up(5)
-    end
-
-    it '#touch_in records the entry station of the current journey' do
-      subject.touch_in(station)
-      expect(subject.entry_station).to eq station
-    end
-
-    it 'touch_out wipes the current entry station to nil' do
-      subject.touch_in(station)
-      subject.touch_out(station)
-      expect(subject.entry_station).to eq nil
     end
   end
 
@@ -106,18 +90,25 @@ describe Oystercard do
     end
 
     it 'is empty by default' do
-      expect(subject.journey_history).to eq({})
+      expect(subject.journey_history).to eq([])
     end
   end
 
-  describe 'feature test' do
+
+  describe 'feature test: bank to embankment' do
     before(:each) do
       subject.top_up(5)
-    end
-    it "bank to embankment" do
       subject.touch_in(bank)
       subject.touch_out(embankment)
-      expect(subject.journey_history).to eq(entry: bank, exit: embankment)
+    end
+    it "#journey_history has a Journey stored" do
+      expect(subject.journey_history).to include(a_kind_of(Journey)) 
+    end
+    it "the stored Journey start station is Bank" do
+      expect(subject.journey_history[0].entry_station).to be bank
+    end
+    it "the stored Journey exit station is Embankment" do
+      expect(subject.journey_history[0].exit_station).to be embankment
     end
   end
 end

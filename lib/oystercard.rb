@@ -6,9 +6,9 @@ class Oystercard
   STARTING_BALANCE = 0
   MINIMUM_TO_TRAVEL = 1
   MINIMUM_FARE = 1
+  PENALTY_FARE = 6
 
   def initialize
-    @journey_class = journey_class
     @balance = STARTING_BALANCE
     @limit = CARD_LIMIT
     @journey_history = []
@@ -33,13 +33,13 @@ class Oystercard
     deduct(MINIMUM_FARE)
     @current_journey.exit_station = station
     record_journey
-    @current_journey = nil
   end
 
   private
 
   def record_journey
     @journey_history << @current_journey
+    @current_journey = nil
   end
 
   def deduct(fare)

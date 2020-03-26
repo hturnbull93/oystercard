@@ -89,7 +89,7 @@ describe Oystercard do
       subject.top_up(5)
     end
 
-    it 'is empty by default' do
+    xit 'is empty by default' do
       expect(subject.journey_history).to eq([])
     end
   end
@@ -101,13 +101,13 @@ describe Oystercard do
       subject.touch_in(bank)
       subject.touch_out(embankment)
     end
-    it "#journey_history has a Journey stored" do
+    xit "#journey_history has a Journey stored" do
       expect(subject.journey_history).to include(a_kind_of(Journey)) 
     end
-    it "the stored Journey start station is Bank" do
+    xit "the stored Journey start station is Bank" do
       expect(subject.journey_history[0].entry_station).to be bank
     end
-    it "the stored Journey exit station is Embankment" do
+    xit "the stored Journey exit station is Embankment" do
       expect(subject.journey_history[0].exit_station).to be embankment
     end
   end

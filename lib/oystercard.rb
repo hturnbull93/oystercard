@@ -1,4 +1,5 @@
 require_relative 'station'
+require_relative 'journey'
 
 class Oystercard
   attr_reader :balance, :limit, :journey_history
@@ -25,13 +26,17 @@ class Oystercard
 
   def touch_in(station)
     raise 'Balance under minimum amount to touch in' if under_minimum_balance?
+    deduct(PENALTY_FARE) if !@current_journey.nil?
+
     @current_journey = Journey.new
     @current_journey.entry_station = station
   end
 
   def touch_out(station)
-    deduct(MINIMUM_FARE)
+    deduct(PENALTY_FARE) and return if @current_journey.nil?
+
     @current_journey.exit_station = station
+    deduct(@current_journey.calculate_fare)
     record_journey
   end
 

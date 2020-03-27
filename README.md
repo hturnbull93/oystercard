@@ -4,6 +4,8 @@ This is a project to emulate a Oystercard system in Ruby.
 
 This project was created to practice Test Driven Development with RSpec, and Object Oriented Principles including encapsulation, highly cohesion and low coupling, single responsibility and dependency injection.
 
+The project is incomplete, at this point the Oystercard class is not yet working using the JourneyList class.
+
 ## User Stories
 
 > In order to use public transport  
